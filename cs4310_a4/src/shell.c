@@ -5,6 +5,7 @@
 #include<unistd.h>
 #include<sys/types.h>
 #include<sys/wait.h>
+#include<sys/stat.h>
 #include<readline/readline.h>
 #include<readline/history.h>
 
@@ -150,7 +151,7 @@ void openHelp()
 // Function to execute builtin commands
 int ownCmdHandler(char** parsed)
 {
-    int NoOfOwnCmds = 4, i, switchOwnArg = 0;
+    int NoOfOwnCmds = 5, i, switchOwnArg = 0;
     char* ListOfOwnCmds[NoOfOwnCmds];
     char* username;
     
@@ -158,6 +159,7 @@ int ownCmdHandler(char** parsed)
     ListOfOwnCmds[1] = "cd";
     ListOfOwnCmds[2] = "help";
     ListOfOwnCmds[3] = "hello";
+    ListOfOwnCmds[4] = "mkdir";
     
     for (i = 0; i < NoOfOwnCmds; i++) {
         if (strcmp(parsed[0], ListOfOwnCmds[i]) == 0) {
@@ -171,7 +173,9 @@ int ownCmdHandler(char** parsed)
             printf("\nGoodbye\n");
             exit(0);
         case 2:
-            chdir(parsed[1]);
+            if(chdir(parsed[1]) < 0) {
+                printf("\nCould not change directory..");
+            }
             return 1;
         case 3:
             openHelp();
@@ -182,6 +186,11 @@ int ownCmdHandler(char** parsed)
                    "not a place to play around."
                    "\nUse help to know more..\n",
                    username);
+            return 1;
+        case 5:
+            if(mkdir(parsed[1], 0777) < 0) {
+                printf("\nCould not make new directory..");
+            }
             return 1;
         default:
             break;
