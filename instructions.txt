@@ -1,2 +1,0 @@
-CS 4310 - Assignment 4
-Instructions to Run Shell
